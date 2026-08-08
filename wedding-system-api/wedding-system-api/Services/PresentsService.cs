@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using wedding_system_api.Data;
 using wedding_system_api.Dtos;
+using wedding_system_api.InterfaceServices;
 using wedding_system_api.Models;
-using wedding_system_api.Services.InterfaceServices;
 
 namespace wedding_system_api.Services
 {

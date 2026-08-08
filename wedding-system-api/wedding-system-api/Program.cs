@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using wedding_system_api.Data;
+using wedding_system_api.InterfaceServices;
 using wedding_system_api.Services;
-using wedding_system_api.Services.InterfaceServices;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<wedding_system_apiContext>(options =>

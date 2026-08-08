@@ -1,7 +1,7 @@
 ﻿using wedding_system_api.Dtos;
 using wedding_system_api.Models;
 
-namespace wedding_system_api.Services.InterfaceServices
+namespace wedding_system_api.InterfaceServices
 {
     public interface IPresentInterface
     {
