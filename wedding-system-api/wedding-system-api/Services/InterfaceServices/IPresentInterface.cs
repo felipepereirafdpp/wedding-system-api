@@ -1,12 +1,13 @@
-﻿using wedding_system_api.Models;
+﻿using wedding_system_api.Dtos;
+using wedding_system_api.Models;
 
 namespace wedding_system_api.Services.InterfaceServices
 {
     public interface IPresentInterface
     {
-        Task<IEnumerable<presentsModel>> GetAllAsync();
-        Task<presentsModel?> GetByIdAsync(Guid id);
-        Task<presentsModel> CreateAsync(presentsModel present);
+        Task<IEnumerable<PresentResponseDto>> GetAllAsync();
+        Task<PresentResponseDto?> GetByIdAsync(Guid id);
+        Task<PresentResponseDto> CreateAsync(CreatePresentDto criarPresenteDto);
         Task<bool> UpdateAsync(Guid id, presentsModel present);
         Task<bool> DeleteAsync(Guid id);
     }

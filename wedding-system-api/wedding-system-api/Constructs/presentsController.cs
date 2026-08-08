@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using wedding_system_api.Data;
+﻿using Microsoft.AspNetCore.Mvc;
+using wedding_system_api.Dtos;
 using wedding_system_api.Models;
+using wedding_system_api.Services.InterfaceServices;
 
 namespace wedding_system_api.Constructs
 {
@@ -14,36 +9,35 @@ namespace wedding_system_api.Constructs
     [ApiController]
     public class presentsController : ControllerBase
     {
-        private readonly wedding_system_apiContext _context;
+        private readonly IPresentInterface _presentService;
 
-        public presentsController(wedding_system_apiContext context)
+        public presentsController(IPresentInterface presentService)
         {
-            _context = context;
+            _presentService = presentService;
         }
 
         // GET: api/presents
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<presentsModel>>> GetpresentsModel()
+        public async Task<ActionResult<IEnumerable<PresentResponseDto>>> GetpresentsModel()
         {
-            return await _context.presentsModel.ToListAsync();
+            return Ok(await _presentService.GetAllAsync());
         }
 
         // GET: api/presents/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<presentsModel>> GetpresentsModel(Guid id)
+        public async Task<ActionResult<PresentResponseDto>> GetpresentsModel(Guid id)
         {
-            var presentsModel = await _context.presentsModel.FindAsync(id);
+            var present = await _presentService.GetByIdAsync(id);
 
-            if (presentsModel == null)
+            if (present == null)
             {
                 return NotFound();
             }
 
-            return presentsModel;
+            return present;
         }
 
         // PUT: api/presents/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> PutpresentsModel(Guid id, presentsModel presentsModel)
         {
@@ -52,57 +46,37 @@ namespace wedding_system_api.Constructs
                 return BadRequest();
             }
 
-            _context.Entry(presentsModel).State = EntityState.Modified;
+            var atualizado = await _presentService.UpdateAsync(id, presentsModel);
 
-            try
+            if (!atualizado)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!presentsModelExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
+                return NotFound();
             }
 
             return NoContent();
         }
 
         // POST: api/presents
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<presentsModel>> PostpresentsModel(presentsModel presentsModel)
+        public async Task<ActionResult<PresentResponseDto>> PostpresentsModel([FromForm] CreatePresentDto createPresentDto)
         {
-            _context.presentsModel.Add(presentsModel);
-            await _context.SaveChangesAsync();
+            var criado = await _presentService.CreateAsync(createPresentDto);
 
-            return CreatedAtAction("GetpresentsModel", new { id = presentsModel.Id }, presentsModel);
+            return CreatedAtAction("GetpresentsModel", new { id = criado.Id }, criado);
         }
 
         // DELETE: api/presents/5
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletepresentsModel(Guid id)
         {
-            var presentsModel = await _context.presentsModel.FindAsync(id);
-            if (presentsModel == null)
+            var deletado = await _presentService.DeleteAsync(id);
+
+            if (!deletado)
             {
                 return NotFound();
             }
 
-            _context.presentsModel.Remove(presentsModel);
-            await _context.SaveChangesAsync();
-
             return NoContent();
-        }
-
-        private bool presentsModelExists(Guid id)
-        {
-            return _context.presentsModel.Any(e => e.Id == id);
         }
     }
 }

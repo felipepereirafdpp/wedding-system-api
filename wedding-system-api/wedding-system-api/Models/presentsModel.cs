@@ -6,7 +6,7 @@ namespace wedding_system_api.Models
     {
         public  Guid Id { get; set; }
         public string NamePresent { get; set; }
-        public decimal? PricePresent { get; set; } = 0;
+        public decimal PricePresent { get; set; } = 0;
         public string? DescriptionPresent { get; set; }
         public string? UrlFoto { get; set; }
     }
