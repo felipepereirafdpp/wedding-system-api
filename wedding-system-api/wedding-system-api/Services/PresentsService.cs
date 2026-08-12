@@ -4,6 +4,7 @@ using wedding_system_api.Dtos;
 using wedding_system_api.InterfaceServices;
 using wedding_system_api.Models;
 
+
 namespace wedding_system_api.Services
 {
     public class PresentService : IPresentInterface
@@ -114,6 +115,46 @@ namespace wedding_system_api.Services
             return true;
         }
 
+        public async Task MarcarComoPendenteAsync(Guid presentId)
+        {
+            var present = await _context.presentsModel.FindAsync(presentId);
+            if (present == null) return;
+
+            present.Status = StatusPagamento.Pendente;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task MarcarComoPagoAsync(Guid presentId, string paymentId)
+        {
+            var present = await _context.presentsModel.FindAsync(presentId);
+            if (present == null) return;
+
+            present.Status = StatusPagamento.Pago;
+            present.PaymentId = paymentId;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task MarcarComoRejeitadoAsync(Guid presentId)
+        {
+            var present = await _context.presentsModel.FindAsync(presentId);
+            if (present == null) return;
+
+            present.Status = StatusPagamento.Rejeitado;
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<bool> PagamentoJaProcessadoAsync(string paymentId)
+        {
+            return await _context.presentsModel
+                .AnyAsync(p => p.PaymentId == paymentId && p.Status == StatusPagamento.Pago);
+        }
+
+        public async Task<StatusPagamento?> GetStatusAsync(Guid presentId)
+        {
+            var present = await _context.presentsModel.FindAsync(presentId);
+            return present?.Status;
+        }
+
         // caso precise criar a função patch com as regras para substituir a imagem, porem acredito que nao sera necessario
 
         private async Task<bool> ExistsAsync(Guid id)
@@ -129,7 +170,8 @@ namespace wedding_system_api.Services
                 NamePresent = present.NamePresent,
                 PricePresent = present.PricePresent,
                 DescriptionPresent = present.DescriptionPresent,
-                UrlFoto = present.UrlFoto
+                UrlFoto = present.UrlFoto,
+                Status = present.Status.ToString()
             };
         }
     }

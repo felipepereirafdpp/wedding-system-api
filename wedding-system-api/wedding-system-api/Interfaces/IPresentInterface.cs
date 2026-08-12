@@ -10,5 +10,11 @@ namespace wedding_system_api.InterfaceServices
         Task<PresentResponseDto> CreateAsync(CreatePresentDto criarPresenteDto);
         Task<bool> UpdateAsync(Guid id, presentsModel present);
         Task<bool> DeleteAsync(Guid id);
+
+        Task MarcarComoPendenteAsync(Guid presentId);
+        Task MarcarComoPagoAsync(Guid presentId, string paymentId);
+        Task MarcarComoRejeitadoAsync(Guid presentId);
+        Task<bool> PagamentoJaProcessadoAsync(string paymentId);
+        Task<StatusPagamento?> GetStatusAsync(Guid presentId);
     }
 }
