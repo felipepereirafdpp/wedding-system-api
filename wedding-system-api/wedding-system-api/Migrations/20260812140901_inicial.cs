@@ -1,0 +1,37 @@
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
+
+#nullable disable
+
+namespace wedding_system_api.Migrations
+{
+    /// <inheritdoc />
+    public partial class inicial : Migration
+    {
+        /// <inheritdoc />
+        protected override void Up(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.CreateTable(
+                name: "presentsModel",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    NamePresent = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    PricePresent = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    DescriptionPresent = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UrlFoto = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_presentsModel", x => x.Id);
+                });
+        }
+
+        /// <inheritdoc />
+        protected override void Down(MigrationBuilder migrationBuilder)
+        {
+            migrationBuilder.DropTable(
+                name: "presentsModel");
+        }
+    }
+}
