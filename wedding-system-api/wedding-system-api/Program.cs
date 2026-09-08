@@ -1,26 +1,35 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using wedding_system_api.Data;
 using wedding_system_api.InterfaceServices;
 using wedding_system_api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddDbContext<wedding_system_apiContext>(options =>
-   options.UseSqlServer(builder.Configuration.GetConnectionString("wedding_system_apiContext") ?? throw new InvalidOperationException("Connection string 'wedding_system_apiContext' not found.")));
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("wedding_system_apiContext")
+        ?? throw new InvalidOperationException(
+            "Connection string 'wedding_system_apiContext' not found.")));
 
 builder.Services.AddScoped<IPresentInterface, PresentService>();
 
 builder.Services.AddControllers();
 
+// Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Teste simples para confirmar que esta aplicação está sendo executada
+app.MapGet("/teste", () => "API funcionando!");
+
+// Swagger
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
-
 app.UseStaticFiles();
-
 app.UseAuthorization();
 
 app.MapControllers();
