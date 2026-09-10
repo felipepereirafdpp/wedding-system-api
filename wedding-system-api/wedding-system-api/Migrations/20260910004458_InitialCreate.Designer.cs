@@ -12,15 +12,15 @@ using wedding_system_api.Data;
 namespace wedding_system_api.Migrations
 {
     [DbContext(typeof(wedding_system_apiContext))]
-    [Migration("20260812140901_inicial")]
-    partial class inicial
+    [Migration("20260910004458_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.2")
+                .HasAnnotation("ProductVersion", "10.0.11")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
